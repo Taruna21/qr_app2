@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter URL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter a URL</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" placeholder="Enter URL" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if url %}
+        <h2>URL Submitted:</h2>
+        <p>{{ url }}</p>
+        <h3>Generated Unique ID:</h3>
+        <p>{{ unique_id }}</p>
+
+        {% if img_base64 %}
+            <h3>Generated QR Code:</h3>
+            <img src="data:image/png;base64,{{ img_base64 }}" alt="Generated QR Code">
+        {% endif %}
+    {% endif %}
+
+    <h2>Saved URLs:</h2>
+    <ul>
+        {% for record in url_records %}
+            <li>
+                <a href="{{ record.url }}" target="_blank">{{ record.url }}</a> - Unique ID: {{ record.unique_id }}
+            </li>
+        {% empty %}
+            <li>No URLs submitted yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
